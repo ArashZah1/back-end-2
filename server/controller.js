@@ -2,15 +2,11 @@ const houses = require('./db.json') //auto fills with json file when using house
 let globalId = 4;
 
 module.exports = {
-    getAllHouses: (req, res) => res.status(200).send(houses), //can be houses
-    deleteHouse: function (req,res) {
-        const targetIndex = houses.findIndex(function (houseObj) {
-            return houseObj.id === +req.params.houseId
-        });
-
-        houses.splice(targetIndex, 1)
-        res.status(200).send(houses)
-       
+    getHouses: (req, res) => res.status(200).send(houses), //can be houses
+    deleteHouse: (req, res) => {
+        let index = houses.findIndex(elem => elem.id === +req.params.id)
+        houses.splice(index, 1)//cuts out index given and what 
+        res.status(200).send(houses)    
         //keep terms consistent
     }, //finds index of element given
     createHouse: (req, res) => {
@@ -30,16 +26,12 @@ module.exports = {
         let { type } = req.body
         let index = houses.findIndex(elem => +elem.id === +id)
 
-        if (houses[index].price === 0 && type === 'minus') {
-            res.sendStatus(400)
-        }
-        else if ( type === 'plus' ) {
+        if ( type === 'plus' ) {
             houses[index].price += 10000
             res.status(200).send(houses);
         } else if ( type === 'minus') {
             houses[index].price -= 10000
-        } else {
-            res.statusSend(400)
+            res.status(200).send(houses);
         }
 // account for negative
     }
